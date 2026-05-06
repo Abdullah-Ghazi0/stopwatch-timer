@@ -122,3 +122,55 @@ function updateUI() {
 }
 
 updateUI()
+
+
+// Timer Input
+const hourInput = document.querySelector('#hour');
+const minInput = document.querySelector("#min");
+const secInput = document.querySelector("#sec");
+
+// Timer buttons
+const timerToggle = document.querySelector('#timer-toggle');
+const timerReset = document.querySelector('#timer-reset');
+
+function validateInput() {
+    let hourValue = Number(hourInput.value);
+    let minValue = Number(minInput.value);
+    let secValue = Number(secInput.value);
+
+    if (secValue < 0) {
+        secValue = '00';
+    } else if (secValue >= 60) {
+        minIncValue = Math.floor(secValue / 60);
+        secValue = secValue % 60;
+        minValue += minIncValue;
+    }
+
+    if (minValue < 0) {
+        minValue = '00';
+    } else if (minValue >= 60) {
+        hourIncValue = Math.floor(minValue / 60);
+        minValue = minValue % 60;
+        hourValue === 12 ? minValue = 59 : hourValue += hourIncValue;
+    }
+
+    if (hourValue < 0) {
+        hourValue = '00';
+    }else if (hourValue > 12) {
+        hourValue = 12;
+    }
+    
+    hourInput.value = String(hourValue).padStart(2, '0');
+    minInput.value = String(minValue).padStart(2, '0');
+    secInput.value = String(secValue).padStart(2, '0');
+}
+
+hourInput.addEventListener('blur', validateInput);
+minInput.addEventListener('blur', validateInput);
+secInput.addEventListener('blur', validateInput);
+
+timerReset.addEventListener('click', ()=> {
+    hourInput.value = '00';
+    minInput.value = '00';
+    secInput.value = '00';
+})
