@@ -133,6 +133,9 @@ const secInput = document.querySelector("#sec");
 const timerToggle = document.querySelector('#timer-toggle');
 const timerReset = document.querySelector('#timer-reset');
 
+let timerLimit;
+let timerState;
+
 function validateInput() {
     let hourValue = Number(hourInput.value);
     let minValue = Number(minInput.value);
@@ -169,8 +172,30 @@ hourInput.addEventListener('blur', validateInput);
 minInput.addEventListener('blur', validateInput);
 secInput.addEventListener('blur', validateInput);
 
+timerToggle.addEventListener('click', startTimer)
+
 timerReset.addEventListener('click', ()=> {
     hourInput.value = '00';
     minInput.value = '00';
     secInput.value = '00';
 })
+
+function startTimer() {
+    let hours = Number(hourInput.value);
+    let hourINms = hours * 60 * 60 * 1000;
+
+    let mins = Number(minInput.value);
+    let minINms = mins * 60 * 1000;
+
+    let sec = Number(secInput.value);
+    let secINms = sec * 1000;
+    
+
+    timerLimit = Date.now() + (hourINms + minINms + secINms);
+
+    hourInput.readOnly = true;
+    minInput.readOnly = true;
+    secInput.readOnly = true;
+
+    timerState = setInterval(countDown, 500)
+}
