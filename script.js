@@ -23,17 +23,17 @@ let pauseTime;
 
 toggleBtn.addEventListener('click', (e) => {
     if (!state) {
-        startTimer()
+        startStopwatch()
         e.target.textContent = "Pause";
     }else {
-        stopTimer();
+        pauseStopWatch();
         e.target.textContent = "Resume";
     }
     
 })
 
 resetBtn.addEventListener('click', () => {
-    stopTimer();
+    pauseStopWatch();
 
     startTime = undefined;
     displayTime.min = "00"
@@ -48,7 +48,7 @@ resetBtn.addEventListener('click', () => {
 lapBtn.addEventListener("click", createLaps)
 
 
-function startTimer() {
+function startStopwatch() {
     if (!startTime) {
         startTime = Date.now()
     } else {
@@ -64,7 +64,7 @@ function startTimer() {
     }, 100)
 }
 
-function stopTimer() {
+function pauseStopWatch() {
     pauseTime = Date.now()
     clearInterval(state);
     state = undefined;
@@ -91,14 +91,21 @@ function formateTime(ms) {
     let min = Math.floor(Math.floor(totalSec) / 60);
     let sec = totalSec % 60;
 
+    let hour = 0;
+    if (ms >= 3600000) {
+        hour = Math.floor(min / 60);
+        min = min % 60;
+    }
+
+    let formatedhour = String(hour).padStart(2, '0');
     let formatedMin = String(min).padStart(2, '0');
     let formatedSec = sec.toFixed(1).padStart(4,  '0');
 
-    return [formatedMin, formatedSec]
+    return [formatedhour, formatedMin, formatedSec]
 }
 
 function updateTime(ms) {
-    let [formatedMin, formatedSec] = formateTime(ms)
+    let [formatedhour, formatedMin, formatedSec] = formateTime(ms);
 
     displayTime.min = formatedMin;
     displayTime.sec = formatedSec;
@@ -107,8 +114,8 @@ function updateTime(ms) {
 
 function updateLapsUI() {
     const {lapTime, lapDiff} = laps.at(-1);
-    let [min_fLapTime, sec_fLapTime] = formateTime(lapTime);
-    let [min_fLapDiff, sec_fLapDiff] = formateTime(lapDiff);
+    let [formatedhour, min_fLapTime, sec_fLapTime] = formateTime(lapTime);
+    let [formatedhourDiff, min_fLapDiff, sec_fLapDiff] = formateTime(lapDiff);
 
     const newLapRecord = document.createElement("div");
     newLapRecord.textContent = `#${ laps.length }             ${min_fLapDiff}:${sec_fLapDiff}            ${ min_fLapTime }:${ sec_fLapTime }`;
@@ -124,6 +131,11 @@ function updateUI() {
 updateUI()
 
 
+
+
+
+
+
 // Timer Input
 const hourInput = document.querySelector('#hour');
 const minInput = document.querySelector("#min");
@@ -131,10 +143,12 @@ const secInput = document.querySelector("#sec");
 
 // Timer buttons
 const timerToggle = document.querySelector('#timer-toggle');
-const timerReset = document.querySelector('#timer-reset');
+const timerResetBtn = document.querySelector('#timer-reset');
 
 let timerLimit;
 let timerState;
+let timerPausedAt;
+let timerResumedAt;
 
 function validateInput() {
     let hourValue = Number(hourInput.value);
@@ -172,12 +186,20 @@ hourInput.addEventListener('blur', validateInput);
 minInput.addEventListener('blur', validateInput);
 secInput.addEventListener('blur', validateInput);
 
-timerToggle.addEventListener('click', startTimer)
+timerToggle.addEventListener('click', () => {
+    if (!timerLimit) {
+        startTimer();
+    }else if (!timerState) {
+        resumeTimer()
+    }else {
+        pauseTimer();
+    }
+    if (timerLimit) timerToggle.textContent = (!timerState) ? "Resume" : "Pause";
+    
+})
 
-timerReset.addEventListener('click', ()=> {
-    hourInput.value = '00';
-    minInput.value = '00';
-    secInput.value = '00';
+timerResetBtn.addEventListener('click', ()=> {
+    timerReset();
 })
 
 function startTimer() {
@@ -190,12 +212,58 @@ function startTimer() {
     let sec = Number(secInput.value);
     let secINms = sec * 1000;
     
-
-    timerLimit = Date.now() + (hourINms + minINms + secINms);
+    let totalTime = hourINms + minINms + secINms;
+    if (!totalTime) return;
+    timerLimit = Date.now() + totalTime;
 
     hourInput.readOnly = true;
     minInput.readOnly = true;
     secInput.readOnly = true;
 
     timerState = setInterval(countDown, 500)
+}
+
+function countDown() {
+    let currentTime = timerLimit - Date.now();
+    let [formatedhour, formatedMin, formatedSec] = formateTime(currentTime);
+    formatedSec = formatedSec.slice(0,  -2);
+
+    hourInput.value = formatedhour;
+    minInput.value = formatedMin;
+    secInput.value = formatedSec;
+
+
+    if (currentTime < 500) {
+        timerReset();
+    }
+}
+
+function pauseTimer() {
+    clearInterval(timerState);
+    timerState = undefined;
+    timerPausedAt = Date.now();
+}
+
+function resumeTimer() {
+    timerResumedAt = Date.now();
+    timerLimit += timerResumedAt - timerPausedAt;
+    timerState = setInterval(countDown, 500);
+}
+
+function timerReset() {
+    pauseTimer();
+
+    timerLimit = undefined;
+    timerPausedAt = undefined;
+    timerResumedAt = undefined;
+
+    hourInput.value = '00';
+    minInput.value = '00';
+    secInput.value = '00';
+
+    hourInput.readOnly = false;
+    minInput.readOnly = false;
+    secInput.readOnly = false;
+
+    timerToggle.textContent = "Start";
 }
