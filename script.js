@@ -65,7 +65,7 @@ function startStopwatch() {
 }
 
 function pauseStopWatch() {
-    pauseTime = Date.now()
+    if (state) pauseTime = Date.now();
     clearInterval(state);
     state = undefined;
 }
@@ -73,11 +73,11 @@ function pauseStopWatch() {
 function createLaps() {
     if (!state) return;
 
-    newLapTime = Date.now() - startTime;
+    let newLapTime = Date.now() - startTime;
      
-    newLapDiff = laps.length ? newLapTime - laps.at(-1).lapTime : newLapTime;
+    let newLapDiff = laps.length ? newLapTime - laps.at(-1).lapTime : newLapTime;
 
-    newlap = {
+    const newlap = {
         'lapTime' : newLapTime,
         'lapDiff' : newLapDiff
     }
@@ -145,6 +145,8 @@ const secInput = document.querySelector("#sec");
 const timerToggle = document.querySelector('#timer-toggle');
 const timerResetBtn = document.querySelector('#timer-reset');
 
+const audio = new Audio("audio.mp3");
+
 let timerLimit;
 let timerState;
 let timerPausedAt;
@@ -158,7 +160,7 @@ function validateInput() {
     if (secValue < 0) {
         secValue = '00';
     } else if (secValue >= 60) {
-        minIncValue = Math.floor(secValue / 60);
+        let minIncValue = Math.floor(secValue / 60);
         secValue = secValue % 60;
         minValue += minIncValue;
     }
@@ -166,7 +168,7 @@ function validateInput() {
     if (minValue < 0) {
         minValue = '00';
     } else if (minValue >= 60) {
-        hourIncValue = Math.floor(minValue / 60);
+        let hourIncValue = Math.floor(minValue / 60);
         minValue = minValue % 60;
         hourValue === 12 ? minValue = 59 : hourValue += hourIncValue;
     }
@@ -233,8 +235,10 @@ function countDown() {
     secInput.value = formatedSec;
 
 
-    if (currentTime < 500) {
+    if (currentTime <= 0) {
         timerReset();
+        audio.load();
+        audio.play();
     }
 }
 
@@ -266,4 +270,6 @@ function timerReset() {
     secInput.readOnly = false;
 
     timerToggle.textContent = "Start";
+
+    audio.pause();
 }
