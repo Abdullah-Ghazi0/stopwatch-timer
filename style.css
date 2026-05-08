@@ -1,38 +1,67 @@
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 body {
     font-size: 30px;
-    padding: 50px;
+    color: white;
+    overflow: hidden;
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(135deg, #0f222a, #1e2f3b);
 }
 
 .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.slider {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     width: 100%;
-}
+    height: 100vh;
+    overflow: hidden;
 
-.screen {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
 }
+
+
+.slider {
+    display: flex;
+    width: 100vw;
+    height: 100%;
+
+    transition: transform 0.3s ease;
+
+    touch-action: pan-y;
+}
+
+.screen {
+    min-width: 100vw;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 25px;
+}
+h3 {
+    margin-top: clamp(100, 2vw, 200px);
+}
+#timer-timeDisplay,
+#st-timeDisplay {
+    font-size: clamp(50px, 3vw , 90px);
+    color:white ;
+}
+
 
 input {
     border: none;
     outline: none;
-    width: 40px;
-    font-size: 30px;
+    width: 65px;
+    font-size: clamp(50px, 3vw , 90px);
+    background-color: #162933;
+    color: white;
+    font-family: sans-serif;
 }
 
 input[type="number"]::-webkit-outer-spin-button,
@@ -40,3 +69,128 @@ input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+.nav {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.nav-btn {
+    margin-top: clamp(18px, 3vw, 40px);
+    background: #152630;
+    font-size: clamp(20px, 3vw, 25px);
+    color: white;
+    border: none;
+    padding: 13px clamp(8px, 2vw, 30px);
+    border-radius: 8px;
+    width: 40%;
+    position: relative;
+    min-width: 180px;
+
+    transition: all 200ms ease;
+}
+
+.nav-btn::before {
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.nav-btn:hover {
+    background: #172a35;
+}
+
+.nav-btn:active {
+    background-color: #213c4b;
+    scale: 0.9;
+}
+.nav-btn.active {
+    color: white;
+    border-bottom: rgb(150, 255, 170);
+}
+
+.nav-btn.active::before {
+    content: "";
+    position: absolute;
+
+    opacity: 1;
+    
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: 100%;
+    height: clamp(35px, 2vw, 40px);
+
+    background: radial-gradient(
+    ellipse at center bottom,
+    rgba(147, 188, 204, 0.8) 0%,
+    rgba(156, 186, 196, 0.3) 40%,
+    rgba(0, 200, 255, 0) 75%
+  );
+
+  filter: blur(2px);
+  pointer-events: none;
+}
+
+
+#timer-buttons {
+    margin-top: clamp(150px , 4vw, 300px);
+    position: relative;
+}
+
+#timer-toggle {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#timer-reset {
+    position: absolute;
+    top: 30px;
+    left: clamp(80px, 2vw, 110px);
+}
+
+#st-toggle {
+    margin: 0 20px;
+}
+
+.start-btns {
+    background: #c05e6f;
+    color: white;
+    height: 100px;
+    width: 100px;
+    border: none;
+    font-size: 21px;
+    border-radius: 50%;
+    padding: 10px;
+
+    transition: all 300ms ease;
+}
+
+.start-btns:hover {
+    background: #b34f60;
+}
+
+.start-btns:active {
+    scale: 0.9;
+    background: #e06f82
+}
+
+.other-btns {
+    background: #213c4b;
+    font-size: 15px;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 15px;
+
+    transition: all 200ms ease;
+}
+
+.other-btns:hover {
+    background: #2a4d5f
+}
+.other-btns:active {
+    scale: 0.95;
+}
+

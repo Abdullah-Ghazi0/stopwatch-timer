@@ -273,3 +273,27 @@ function timerReset() {
 
     audio.pause();
 }
+
+
+
+
+// UI
+
+const slider = document.querySelector(".slider");
+const navBtns = document.querySelectorAll(".nav-btn")
+
+let currendSlide = 0;
+
+function changeSlide(index) {
+    navBtns[currendSlide].classList.remove("active")
+    currendSlide = index;
+    navBtns[currendSlide].classList.add("active")
+    slider.style.transform = `translateX(-${index * 100}vw)`
+}
+
+for (const btn of navBtns) {
+    btn.addEventListener('click', () => {
+        let index = Number(btn.dataset.index);
+        changeSlide(index);
+    })
+}

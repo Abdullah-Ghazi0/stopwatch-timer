@@ -9,3 +9,5 @@ Stop watch and timer app with accurate time calculations!
 - Create Laps
 - Max values for Timer Input
 - Accurate count down
+- Auto overflow convertion for timer input
+- Audio alert on timer ends
