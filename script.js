@@ -156,7 +156,7 @@ const secInput = document.querySelector("#sec");
 const timerToggle = document.querySelector('#timer-toggle');
 const timerResetBtn = document.querySelector('#timer-reset');
 
-const audio = new Audio("audio.mp3");
+const audio = new Audio("static/audio.mp3");
 
 let timerLimit;
 let timerState;
