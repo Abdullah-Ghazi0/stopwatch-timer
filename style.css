@@ -3,6 +3,10 @@
     padding: 0;
     box-sizing: border-box;
 }
+html {
+  scrollbar-color: #0f222a #182934; /* thumb track */
+  scrollbar-width: thin;
+}
 
 body {
     font-size: 30px;
@@ -44,15 +48,17 @@ body {
 
     gap: 25px;
 }
-h3 {
-    margin-top: clamp(100, 2vw, 200px);
-}
+
 #timer-timeDisplay,
 #st-timeDisplay {
     font-size: clamp(50px, 3vw , 90px);
     color:white ;
+    font-family: 'JetBrains Mono', monospace;
 }
 
+#st-timeDisplay {
+    margin-top: 100px;
+}
 
 input {
     border: none;
@@ -61,7 +67,7 @@ input {
     font-size: clamp(50px, 3vw , 90px);
     background-color: #162933;
     color: white;
-    font-family: sans-serif;
+    font-family: 'JetBrains Mono', monospace;
 }
 
 input[type="number"]::-webkit-outer-spin-button,
@@ -87,6 +93,7 @@ input[type="number"]::-webkit-inner-spin-button {
     width: 40%;
     position: relative;
     min-width: 180px;
+    opacity: 0.8;
 
     transition: all 200ms ease;
 }
@@ -106,7 +113,7 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 .nav-btn.active {
     color: white;
-    border-bottom: rgb(150, 255, 170);
+    opacity: 1;
 }
 
 .nav-btn.active::before {
@@ -123,18 +130,19 @@ input[type="number"]::-webkit-inner-spin-button {
 
     background: radial-gradient(
     ellipse at center bottom,
-    rgba(147, 188, 204, 0.8) 0%,
-    rgba(156, 186, 196, 0.3) 40%,
+    rgba(141, 167, 177, 0.8) 0%,
+    rgba(188, 223, 235, 0.3) 40%,
     rgba(0, 200, 255, 0) 75%
   );
 
   filter: blur(2px);
   pointer-events: none;
+  border-bottom: rgb(147, 188, 204) solid 1px;
 }
 
 
 #timer-buttons {
-    margin-top: clamp(150px , 4vw, 300px);
+    margin-top: clamp(260px , 4vw, 300px);
     position: relative;
 }
 
@@ -194,3 +202,14 @@ input[type="number"]::-webkit-inner-spin-button {
     scale: 0.95;
 }
 
+.laps {
+    height: 220px;
+    margin: 20px 0;
+    overflow-y: auto;
+    padding-right: 10px;
+    font-size: 25px;
+}
+
+.lapTime {
+    margin: 0 50px;
+}

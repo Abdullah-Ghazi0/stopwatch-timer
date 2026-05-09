@@ -118,7 +118,18 @@ function updateLapsUI() {
     let [formatedhourDiff, min_fLapDiff, sec_fLapDiff] = formateTime(lapDiff);
 
     const newLapRecord = document.createElement("div");
-    newLapRecord.textContent = `#${ laps.length }             ${min_fLapDiff}:${sec_fLapDiff}            ${ min_fLapTime }:${ sec_fLapTime }`;
+    const newLapId = document.createElement("span");
+    const newLapDiff = document.createElement("span");
+    const newLapTime = document.createElement("span");
+    
+    newLapId.textContent = `#${ laps.length }`;
+    newLapDiff.textContent = `+${min_fLapDiff}:${sec_fLapDiff}`
+    newLapTime.textContent = `${ min_fLapTime }:${ sec_fLapTime }`
+
+    newLapTime.classList.add("lapTime")
+
+    newLapRecord.append(newLapId, newLapTime, newLapDiff)
+    //newLapRecord.textContent = `#${ laps.length }             ${min_fLapDiff}:${sec_fLapDiff}            ${ min_fLapTime }:${ sec_fLapTime }`;
 
     lapsList.append(newLapRecord);
 }
