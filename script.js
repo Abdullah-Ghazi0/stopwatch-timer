@@ -295,6 +295,8 @@ const navBtns = document.querySelectorAll(".nav-btn")
 
 let currendSlide = 0;
 
+let startX = 0;
+
 function changeSlide(index) {
     navBtns[currendSlide].classList.remove("active")
     currendSlide = index;
@@ -308,3 +310,19 @@ for (const btn of navBtns) {
         changeSlide(index);
     })
 }
+
+window.addEventListener("touchstart", (e) => {
+    startX = e.touches[0].clientX;
+})
+
+window.addEventListener("touchend", (e) => {
+    let endX = e.changedTouches[0].clientX;
+
+    const touchDiff = endX - startX;
+
+    if (touchDiff < 50) {
+        changeSlide(1);
+    } else if (touchDiff > 50) {
+        changeSlide(0);
+    }
+})
