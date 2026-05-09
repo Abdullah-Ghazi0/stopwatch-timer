@@ -21,18 +21,26 @@ let state;
 let startTime;
 let pauseTime;
 
-toggleBtn.addEventListener('click', (e) => {
+toggleBtn.addEventListener('click', stopWatchToggle)
+
+
+resetBtn.addEventListener('click', stopWatchReset)
+
+
+lapBtn.addEventListener("click", createLaps)
+
+function stopWatchToggle() {
     if (!state) {
         startStopwatch()
-        e.target.textContent = "Pause";
+        toggleBtn.textContent = "Pause";
     }else {
         pauseStopWatch();
-        e.target.textContent = "Resume";
+        toggleBtn.textContent = "Resume";
     }
     
-})
+}
 
-resetBtn.addEventListener('click', () => {
+function stopWatchReset() {
     pauseStopWatch();
 
     startTime = undefined;
@@ -43,10 +51,7 @@ resetBtn.addEventListener('click', () => {
     laps = [];
     lapsList.replaceChildren();
     updateUI();
-})
-
-lapBtn.addEventListener("click", createLaps)
-
+}
 
 function startStopwatch() {
     if (!startTime) {
@@ -153,7 +158,7 @@ const minInput = document.querySelector("#min");
 const secInput = document.querySelector("#sec");
 
 // Timer buttons
-const timerToggle = document.querySelector('#timer-toggle');
+const timerToggleBtn = document.querySelector('#timer-toggle');
 const timerResetBtn = document.querySelector('#timer-reset');
 
 const audio = new Audio("static/audio.mp3");
@@ -199,7 +204,13 @@ hourInput.addEventListener('blur', validateInput);
 minInput.addEventListener('blur', validateInput);
 secInput.addEventListener('blur', validateInput);
 
-timerToggle.addEventListener('click', () => {
+timerToggleBtn.addEventListener('click', timerToggle)
+
+timerResetBtn.addEventListener('click', ()=> {
+    timerReset();
+})
+
+function timerToggle() {
     if (!timerLimit) {
         startTimer();
     }else if (!timerState) {
@@ -207,13 +218,8 @@ timerToggle.addEventListener('click', () => {
     }else {
         pauseTimer();
     }
-    if (timerLimit) timerToggle.textContent = (!timerState) ? "Resume" : "Pause";
-    
-})
-
-timerResetBtn.addEventListener('click', ()=> {
-    timerReset();
-})
+    if (timerLimit) timerToggleBtn.textContent = (!timerState) ? "Resume" : "Pause";
+}
 
 function startTimer() {
     let hours = Number(hourInput.value);
@@ -280,7 +286,7 @@ function timerReset() {
     minInput.readOnly = false;
     secInput.readOnly = false;
 
-    timerToggle.textContent = "Start";
+    timerToggleBtn.textContent = "Start";
 
     audio.pause();
 }
@@ -320,9 +326,31 @@ window.addEventListener("touchend", (e) => {
 
     const touchDiff = endX - startX;
 
-    if (touchDiff < 50) {
+    if (touchDiff < -70) {
         changeSlide(1);
-    } else if (touchDiff > 50) {
+    } else if (touchDiff > 70) {
         changeSlide(0);
     }
 })
+
+window.addEventListener('keydown', (e) => {
+    let keyPressed = e.code;
+    if (keyPressed === 'Space') {
+        e.preventDefault();
+        currendSlide === 0 ? stopWatchToggle() : timerToggle();
+    } else if (keyPressed === "Escape") {
+        e.preventDefault();
+        currendSlide === 0 ? stopWatchReset() : timerReset() 
+    } else if (keyPressed === "Enter" && currendSlide === 0) {
+        e.preventDefault();
+        createLaps();
+    } else if (keyPressed === "ArrowRight" && currendSlide === 0) {
+        changeSlide(1);
+    } else if (keyPressed === "ArrowLeft" && currendSlide === 1) {
+        changeSlide(0);
+    }
+    
+    
+})
+// Default timer
+minInput.value = '01';
