@@ -1,96 +1,98 @@
+// -------------StopWatch
 
-// -------------StopWatch ... Getting Elements 
-
+// stopwatch elements
 const toggleBtn = document.querySelector('#st-toggle');
 const resetBtn = document.querySelector('#st-reset');
-const lapBtn = document.querySelector("#st-lapBtn");
+const lapBtn = document.querySelector('#st-lapBtn');
 const display = document.querySelector('#st-timeDisplay');
-const lapsList = document.querySelector(".laps");
+const lapsList = document.querySelector('.laps');
 
-
-//-------------Defaults
+// Stopwatch Defaults
 
 const displayTime = {
-    "min" : "00",
-    "sec" : "00.0"
-}
+    min: '00',
+    sec: '00.0',
+};
 
-let laps = []
+let laps = [];
 
-let state;
+// Stopwatch state
+
+let swIntervalId;
 let startTime;
 let pauseTime;
 
-toggleBtn.addEventListener('click', stopWatchToggle)
+// Stopwatch event listeners
 
+toggleBtn.addEventListener('click', stopWatchToggle);
 
-resetBtn.addEventListener('click', stopWatchReset)
+resetBtn.addEventListener('click', stopWatchReset);
 
+lapBtn.addEventListener('click', createLaps);
 
-lapBtn.addEventListener("click", createLaps)
+// stopwatch logic
 
 function stopWatchToggle() {
-    if (!state) {
-        startStopwatch()
-        toggleBtn.textContent = "Pause";
-    }else {
+    if (!swIntervalId) {
+        startStopwatch();
+        toggleBtn.textContent = 'Pause';
+    } else {
         pauseStopWatch();
-        toggleBtn.textContent = "Resume";
+        toggleBtn.textContent = 'Resume';
     }
-    
 }
 
 function stopWatchReset() {
     pauseStopWatch();
 
     startTime = undefined;
-    displayTime.min = "00"
-    displayTime.sec = "00.0"
-    toggleBtn.textContent = "Start"
+    displayTime.min = '00';
+    displayTime.sec = '00.0';
+    toggleBtn.textContent = 'Start';
 
     laps = [];
     lapsList.replaceChildren();
-    updateUI();
+    updateStopwatchUI();
 }
 
 function startStopwatch() {
     if (!startTime) {
-        startTime = Date.now()
+        startTime = Date.now();
     } else {
-        let resumeTime = Date.now()
-        startTime = startTime + (resumeTime - pauseTime)
+        let resumeTime = Date.now();
+        startTime = startTime + (resumeTime - pauseTime);
     }
-        state = setInterval(()=> {
+    swIntervalId = setInterval(() => {
         let timeDiff = Date.now() - startTime;
 
         updateTime(timeDiff);
 
-        updateUI();
-    }, 100)
+        updateStopwatchUI();
+    }, 100);
 }
 
 function pauseStopWatch() {
-    if (state) pauseTime = Date.now();
-    clearInterval(state);
-    state = undefined;
+    if (swIntervalId) pauseTime = Date.now();
+    clearInterval(swIntervalId);
+    swIntervalId = undefined;
 }
 
 function createLaps() {
-    if (!state) return;
+    if (!swIntervalId) return;
 
     let newLapTime = Date.now() - startTime;
-     
+
     let newLapDiff = laps.length ? newLapTime - laps.at(-1).lapTime : newLapTime;
 
     const newlap = {
-        'lapTime' : newLapTime,
-        'lapDiff' : newLapDiff
-    }
+        lapTime: newLapTime,
+        lapDiff: newLapDiff,
+    };
     laps.push(newlap);
     updateLapsUI();
 }
 
-function formateTime(ms) {
+function formatTime(ms) {
     let totalSec = ms / 1000;
 
     let min = Math.floor(Math.floor(totalSec) / 60);
@@ -104,70 +106,68 @@ function formateTime(ms) {
 
     let formatedhour = String(hour).padStart(2, '0');
     let formatedMin = String(min).padStart(2, '0');
-    let formatedSec = sec.toFixed(1).padStart(4,  '0');
+    let formatedSec = sec.toFixed(1).padStart(4, '0');
 
-    return [formatedhour, formatedMin, formatedSec]
+    return [formatedhour, formatedMin, formatedSec];
 }
 
 function updateTime(ms) {
-    let [formatedhour, formatedMin, formatedSec] = formateTime(ms);
+    let [formatedhour, formatedMin, formatedSec] = formatTime(ms);
 
     displayTime.min = formatedMin;
     displayTime.sec = formatedSec;
-
 }
 
 function updateLapsUI() {
-    const {lapTime, lapDiff} = laps.at(-1);
-    let [formatedhour, min_fLapTime, sec_fLapTime] = formateTime(lapTime);
-    let [formatedhourDiff, min_fLapDiff, sec_fLapDiff] = formateTime(lapDiff);
+    const { lapTime, lapDiff } = laps.at(-1);
+    let [formatedhour, min_fLapTime, sec_fLapTime] = formatTime(lapTime);
+    let [formatedhourDiff, min_fLapDiff, sec_fLapDiff] = formatTime(lapDiff);
 
-    const newLapRecord = document.createElement("div");
-    const newLapId = document.createElement("span");
-    const newLapDiff = document.createElement("span");
-    const newLapTime = document.createElement("span");
-    
-    newLapId.textContent = `#${ laps.length }`;
-    newLapDiff.textContent = `+${min_fLapDiff}:${sec_fLapDiff}`
-    newLapTime.textContent = `${ min_fLapTime }:${ sec_fLapTime }`
+    const newLapRecord = document.createElement('div');
+    const newLapId = document.createElement('span');
+    const newLapDiff = document.createElement('span');
+    const newLapTime = document.createElement('span');
 
-    newLapTime.classList.add("lapTime")
+    newLapId.textContent = `#${laps.length}`;
+    newLapDiff.textContent = `+${min_fLapDiff}:${sec_fLapDiff}`;
+    newLapTime.textContent = `${min_fLapTime}:${sec_fLapTime}`;
 
-    newLapRecord.append(newLapId, newLapTime, newLapDiff)
-    //newLapRecord.textContent = `#${ laps.length }             ${min_fLapDiff}:${sec_fLapDiff}            ${ min_fLapTime }:${ sec_fLapTime }`;
+    newLapTime.classList.add('lapTime');
+
+    newLapRecord.append(newLapId, newLapTime, newLapDiff);
 
     lapsList.append(newLapRecord);
 }
 
-function updateUI() {
-    const {min, sec} = displayTime;
-    display.textContent = `${ min }:${sec }`
+function updateStopwatchUI() {
+    const { min, sec } = displayTime;
+    display.textContent = `${min}:${sec}`;
 }
 
-updateUI()
 
-
-
-
-
+// ---------------------------------TIMER---------------------------
 
 
 // Timer Input
 const hourInput = document.querySelector('#hour');
-const minInput = document.querySelector("#min");
-const secInput = document.querySelector("#sec");
+const minInput = document.querySelector('#min');
+const secInput = document.querySelector('#sec');
 
 // Timer buttons
 const timerToggleBtn = document.querySelector('#timer-toggle');
 const timerResetBtn = document.querySelector('#timer-reset');
 
-const audio = new Audio("static/audio.mp3");
+// Timer Audio
+const audio = new Audio('static/audio.mp3');
 
+// Timer State
 let timerLimit;
-let timerState;
+let timerIntervalId;
 let timerPausedAt;
 let timerResumedAt;
 
+
+// Timer Input validation
 function validateInput() {
     let hourValue = Number(hourInput.value);
     let minValue = Number(minInput.value);
@@ -186,39 +186,43 @@ function validateInput() {
     } else if (minValue >= 60) {
         let hourIncValue = Math.floor(minValue / 60);
         minValue = minValue % 60;
-        hourValue === 12 ? minValue = 59 : hourValue += hourIncValue;
+        hourValue === 12 ? (minValue = 59) : (hourValue += hourIncValue);
     }
 
     if (hourValue < 0) {
         hourValue = '00';
-    }else if (hourValue > 12) {
+    } else if (hourValue > 12) {
         hourValue = 12;
     }
-    
+
     hourInput.value = String(hourValue).padStart(2, '0');
     minInput.value = String(minValue).padStart(2, '0');
     secInput.value = String(secValue).padStart(2, '0');
 }
 
+// Timer Event listners
 hourInput.addEventListener('blur', validateInput);
 minInput.addEventListener('blur', validateInput);
 secInput.addEventListener('blur', validateInput);
 
-timerToggleBtn.addEventListener('click', timerToggle)
+timerToggleBtn.addEventListener('click', timerToggle);
 
-timerResetBtn.addEventListener('click', ()=> {
+timerResetBtn.addEventListener('click', () => {
     timerReset();
-})
+});
+
+// Timer logic
 
 function timerToggle() {
     if (!timerLimit) {
         startTimer();
-    }else if (!timerState) {
-        resumeTimer()
-    }else {
+    } else if (!timerIntervalId) {
+        resumeTimer();
+    } else {
         pauseTimer();
     }
-    if (timerLimit) timerToggleBtn.textContent = (!timerState) ? "Resume" : "Pause";
+    if (timerLimit)
+        timerToggleBtn.textContent = !timerIntervalId ? 'Resume' : 'Pause';
 }
 
 function startTimer() {
@@ -230,7 +234,7 @@ function startTimer() {
 
     let sec = Number(secInput.value);
     let secINms = sec * 1000;
-    
+
     let totalTime = hourINms + minINms + secINms;
     if (!totalTime) return;
     timerLimit = Date.now() + totalTime;
@@ -239,18 +243,17 @@ function startTimer() {
     minInput.readOnly = true;
     secInput.readOnly = true;
 
-    timerState = setInterval(countDown, 500)
+    timerIntervalId = setInterval(countDown, 500);
 }
 
 function countDown() {
     let currentTime = timerLimit - Date.now();
-    let [formatedhour, formatedMin, formatedSec] = formateTime(currentTime);
-    formatedSec = formatedSec.slice(0,  -2);
+    let [formatedhour, formatedMin, formatedSec] = formatTime(currentTime);
+    formatedSec = formatedSec.slice(0, -2);
 
     hourInput.value = formatedhour;
     minInput.value = formatedMin;
     secInput.value = formatedSec;
-
 
     if (currentTime <= 0) {
         timerReset();
@@ -260,15 +263,15 @@ function countDown() {
 }
 
 function pauseTimer() {
-    clearInterval(timerState);
-    timerState = undefined;
+    clearInterval(timerIntervalId);
+    timerIntervalId = undefined;
     timerPausedAt = Date.now();
 }
 
 function resumeTimer() {
     timerResumedAt = Date.now();
     timerLimit += timerResumedAt - timerPausedAt;
-    timerState = setInterval(countDown, 500);
+    timerIntervalId = setInterval(countDown, 500);
 }
 
 function timerReset() {
@@ -286,42 +289,39 @@ function timerReset() {
     minInput.readOnly = false;
     secInput.readOnly = false;
 
-    timerToggleBtn.textContent = "Start";
+    timerToggleBtn.textContent = 'Start';
 
     audio.pause();
 }
 
-
-
-
 // UI
 
-const slider = document.querySelector(".slider");
-const navBtns = document.querySelectorAll(".nav-btn")
+const slider = document.querySelector('.slider');
+const navBtns = document.querySelectorAll('.nav-btn');
 
-let currendSlide = 0;
+let currentSlide = 0;
 
 let startX = 0;
 
 function changeSlide(index) {
-    navBtns[currendSlide].classList.remove("active")
-    currendSlide = index;
-    navBtns[currendSlide].classList.add("active")
-    slider.style.transform = `translateX(-${index * 100}vw)`
+    navBtns[currentSlide].classList.remove('active');
+    currentSlide = index;
+    navBtns[currentSlide].classList.add('active');
+    slider.style.transform = `translateX(-${index * 100}vw)`;
 }
 
 for (const btn of navBtns) {
     btn.addEventListener('click', () => {
         let index = Number(btn.dataset.index);
         changeSlide(index);
-    })
+    });
 }
 
-window.addEventListener("touchstart", (e) => {
+window.addEventListener('touchstart', (e) => {
     startX = e.touches[0].clientX;
-})
+});
 
-window.addEventListener("touchend", (e) => {
+window.addEventListener('touchend', (e) => {
     let endX = e.changedTouches[0].clientX;
 
     const touchDiff = endX - startX;
@@ -331,26 +331,26 @@ window.addEventListener("touchend", (e) => {
     } else if (touchDiff > 70) {
         changeSlide(0);
     }
-})
+});
 
 window.addEventListener('keydown', (e) => {
     let keyPressed = e.code;
     if (keyPressed === 'Space') {
         e.preventDefault();
-        currendSlide === 0 ? stopWatchToggle() : timerToggle();
-    } else if (keyPressed === "Escape") {
+        currentSlide === 0 ? stopWatchToggle() : timerToggle();
+    } else if (keyPressed === 'Escape') {
         e.preventDefault();
-        currendSlide === 0 ? stopWatchReset() : timerReset() 
-    } else if (keyPressed === "Enter" && currendSlide === 0) {
+        currentSlide === 0 ? stopWatchReset() : timerReset();
+    } else if (keyPressed === 'Enter' && currentSlide === 0) {
         e.preventDefault();
         createLaps();
-    } else if (keyPressed === "ArrowRight" && currendSlide === 0) {
+    } else if (keyPressed === 'ArrowRight' && currentSlide === 0) {
         changeSlide(1);
-    } else if (keyPressed === "ArrowLeft" && currendSlide === 1) {
+    } else if (keyPressed === 'ArrowLeft' && currentSlide === 1) {
         changeSlide(0);
     }
-    
-    
-})
-// Default timer
+});
+
+// Creating Default state
 minInput.value = '01';
+updateStopwatchUI();

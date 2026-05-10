@@ -4,8 +4,8 @@
     box-sizing: border-box;
 }
 html {
-  scrollbar-color: #0f222a #182934; /* thumb track */
-  scrollbar-width: thin;
+    scrollbar-color: #0f222a #182934; /* thumb track */
+    scrollbar-width: thin;
 }
 
 body {
@@ -25,7 +25,6 @@ body {
     flex-direction: column;
     align-items: center;
 }
-
 
 .slider {
     display: flex;
@@ -51,8 +50,8 @@ body {
 
 #timer-timeDisplay,
 #st-timeDisplay {
-    font-size: clamp(50px, 3vw , 90px);
-    color:white ;
+    font-size: clamp(50px, 3vw, 90px);
+    color: white;
     font-family: 'JetBrains Mono', monospace;
 }
 
@@ -64,16 +63,16 @@ input {
     border: none;
     outline: none;
     width: 65px;
-    font-size: clamp(50px, 3vw , 90px);
+    font-size: clamp(50px, 3vw, 90px);
     background-color: #162933;
     color: white;
     font-family: 'JetBrains Mono', monospace;
 }
 
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 .nav {
     width: 50%;
@@ -117,11 +116,11 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .nav-btn.active::before {
-    content: "";
+    content: '';
     position: absolute;
 
     opacity: 1;
-    
+
     left: 50%;
     transform: translateX(-50%);
 
@@ -129,20 +128,19 @@ input[type="number"]::-webkit-inner-spin-button {
     height: clamp(35px, 2vw, 40px);
 
     background: radial-gradient(
-    ellipse at center bottom,
-    rgba(141, 167, 177, 0.8) 0%,
-    rgba(188, 223, 235, 0.3) 40%,
-    rgba(0, 200, 255, 0) 75%
-  );
+        ellipse at center bottom,
+        rgba(141, 167, 177, 0.8) 0%,
+        rgba(188, 223, 235, 0.3) 40%,
+        rgba(0, 200, 255, 0) 75%
+    );
 
-  filter: blur(2px);
-  pointer-events: none;
-  border-bottom: rgb(147, 188, 204) solid 1px;
+    filter: blur(2px);
+    pointer-events: none;
+    border-bottom: rgb(147, 188, 204) solid 1px;
 }
 
-
 #timer-buttons {
-    margin-top: clamp(260px , 4vw, 300px);
+    margin-top: clamp(260px, 4vw, 300px);
     position: relative;
 }
 
@@ -181,7 +179,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .start-btns:active {
     scale: 0.9;
-    background: #e06f82
+    background: #e06f82;
 }
 
 .other-btns {
@@ -196,7 +194,7 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .other-btns:hover {
-    background: #2a4d5f
+    background: #2a4d5f;
 }
 .other-btns:active {
     scale: 0.95;
