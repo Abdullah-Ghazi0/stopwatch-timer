@@ -140,7 +140,7 @@ input[type='number']::-webkit-inner-spin-button {
 }
 
 #timer-buttons {
-    margin-top: clamp(260px, 4vw, 300px);
+    margin-top: 30vh;
     position: relative;
 }
 
@@ -201,7 +201,7 @@ input[type='number']::-webkit-inner-spin-button {
 }
 
 .laps {
-    height: 220px;
+    height: 23vh;
     margin: 20px 0;
     overflow-y: auto;
     padding-right: 10px;
