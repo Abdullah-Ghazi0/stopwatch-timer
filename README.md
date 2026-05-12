@@ -37,7 +37,7 @@ Designed with a clean dark UI and smooth interactions to demonstrate strong fund
 
 ## Preview
 
-
+<img width="753" height="606" alt="Screenshot_3" src="https://github.com/user-attachments/assets/9252e1e7-db2a-466c-92ea-eac2d21c5afe" />
 
 ## Keyboard Shortcuts
 
