@@ -55,7 +55,7 @@ Designed with a clean dark UI and smooth interactions to demonstrate strong fund
 
 ## Author
 **Abdullah Ghazi** <br>
-GitHub: https://github.com/Abdullah-Ghazi0 <br>
+GitHub: https://github.com/abdullahghazi-swe <br>
 LinkedIn: https://www.linkedin.com/in/abdullah-ghazi-swe/ <br>
 
 
